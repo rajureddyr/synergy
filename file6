@@ -1,0 +1,42 @@
+node {
+		stage (‘Build’) {
+			bat "msbuild ${C:\\Jenkins\\my_project\\workspace\\test\\my_project.sln}"
+		}
+
+stage('Selenium tests') {
+dir(automation_path) {  //changes the path to “automation_path”
+bat "mvn clean test -Dsuite=SMOKE_TEST -Denvironment=QA"
+}  
+}
+	}
+    stage('Example') {
+        if (env.BRANCH_NAME == 'main') {
+            echo 'I only execute on the main branch'
+        } else {
+            echo 'I execute elsewhere'
+        }
+    }
+    stage('Example') {
+        try {
+            sh 'exit 1'
+        }
+        catch (exc) {
+            echo 'Something failed, I should sound the klaxons!'
+            throw
+        }
+    }
+    stage('Build') {
+        sh 'npm install' // Install dependencies
+        sh 'npm run build' // Build the project
+    }
+
+    stage('Test') {
+        sh 'npm test' // Run tests
+    }
+
+    stage('Deploy') {
+        sh 'rsync -avz dist/ server:/var/www' // Deploy to a server
+    }
+}
+}
+}
